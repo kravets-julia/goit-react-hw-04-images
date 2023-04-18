@@ -55,9 +55,7 @@ export default function ImageGallery({ searchName }) {
       })
       .catch(error => {
         setImg([]);
-
         setStatus('rejected');
-
         console.log(error);
       });
   }, [searchName]);
@@ -107,9 +105,7 @@ export default function ImageGallery({ searchName }) {
       })
       .catch(error => {
         setImg([]);
-
         setStatus('rejected');
-
         console.log(error);
       });
   }, [searchName, pageNumber]);
