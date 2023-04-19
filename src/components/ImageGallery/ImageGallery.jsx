@@ -19,9 +19,9 @@ export default function ImageGallery({ searchName }) {
     if (searchName === '') {
       return;
     }
-    if (pageNumber !== 1) {
-      return;
-    }
+    // if (pageNumber !== 1) {
+    //   return;
+    // }
 
     setStatus('pending');
     setImg([]);
@@ -43,6 +43,7 @@ export default function ImageGallery({ searchName }) {
           return toast.error(`No found image ${searchName}`);
         }
         if (hits.length < 12) {
+          setPageNumber(1);
           setStatus('resolved');
           toast.info('No more image');
         }
@@ -54,14 +55,16 @@ export default function ImageGallery({ searchName }) {
         }));
 
         setImg(arr);
+        setPageNumber(1);
         setStatus('resolved');
       })
       .catch(error => {
         setImg([]);
+        setPageNumber(1);
         setStatus('rejected');
         console.log(error);
       });
-  }, [searchName, pageNumber]);
+  }, [searchName]);
 
   useEffect(() => {
     if (searchName === '') {
@@ -89,6 +92,7 @@ export default function ImageGallery({ searchName }) {
           return toast.error(`No found image ${searchName}`);
         }
         if (hits.length < 12) {
+          setPageNumber(1);
           setStatus('resolved');
           toast.info('No more image');
         }
@@ -104,11 +108,13 @@ export default function ImageGallery({ searchName }) {
           setStatus('resolved');
         } else {
           setImg(arr);
+          setPageNumber(1);
           setStatus('resolved');
         }
       })
       .catch(error => {
         setImg([]);
+        setPageNumber(1);
         setStatus('rejected');
         console.log(error);
       });
