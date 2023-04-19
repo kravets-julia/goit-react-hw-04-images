@@ -16,16 +16,19 @@ export default function ImageGallery({ searchName }) {
   const [pageNumber, setPageNumber] = useState(1);
 
   useEffect(() => {
+    if (searchName === '') {
+      return;
+    }
+    if (pageNumber !== 1) {
+      return;
+    }
+
     setStatus('pending');
     setImg([]);
     setPageNumber(1);
 
     const BASE_URL = 'https://pixabay.com/api/';
     const API_KEY = '33829392-49d1eab567acddcf43bdfe9f1';
-
-    if (searchName === '') {
-      return;
-    }
 
     fetch(
       `${BASE_URL}?q=${searchName}&page=1&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
@@ -58,19 +61,20 @@ export default function ImageGallery({ searchName }) {
         setStatus('rejected');
         console.log(error);
       });
-  }, [searchName]);
+  }, [searchName, pageNumber]);
+
   useEffect(() => {
-    setStatus('pending');
-
-    const BASE_URL = 'https://pixabay.com/api/';
-    const API_KEY = '33829392-49d1eab567acddcf43bdfe9f1';
-
     if (searchName === '') {
       return;
     }
     if (pageNumber === 1) {
       return;
     }
+
+    setStatus('pending');
+
+    const BASE_URL = 'https://pixabay.com/api/';
+    const API_KEY = '33829392-49d1eab567acddcf43bdfe9f1';
 
     fetch(
       `${BASE_URL}?q=${searchName}&page=${pageNumber}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
@@ -119,6 +123,9 @@ export default function ImageGallery({ searchName }) {
   };
 
   const onImgClick = e => {
+    if (e.target.nodeName !== 'IMG') {
+      return;
+    }
     const index = img.findIndex(img => Number(img.id) === Number(e.target.id));
     setLargeImgURL(img[index].largeImageURL);
     setShowModal(true);
@@ -126,7 +133,7 @@ export default function ImageGallery({ searchName }) {
 
   return (
     <>
-      {img.length > 0 && !showModal && (
+      {img.length > 0 && (
         <>
           <ul className={css.ImageGallery} onClick={e => onImgClick(e)}>
             {img.map(img => (
